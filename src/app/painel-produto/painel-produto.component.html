@@ -1,0 +1,164 @@
+<p-panel header="Produtos">
+
+    <div class="p-grid">
+        <div class="p-col-2">Código de barras: </div>
+        <div class="p-col-10">
+            <input pInputText type="text" id="cb" [(ngModel)]="produto.codigo_barras" placeholder="Código de barras">
+        </div>
+
+
+        <div class=" p-col-2">Nome: </div>
+        <div class="p-col-10">
+            <input pInputText type="text" [(ngModel)]="produto.nome" placeholder="Nome">
+        </div>
+
+        <div class="p-col-2">Descrição: </div>
+        <div class="p-col-10">
+            <input pInputText type="text" [(ngModel)]="produto.descricao" placeholder="Descrição">
+        </div>
+
+
+        <div class="p-col-2">Quantidade: </div>
+        <div class="p-col-10">
+            <input pInputText type="number" [(ngModel)]="produto.quantidade" placeholder="Quantidade" step="1">
+        </div>
+
+
+        <div class="p-col-2">Categoria: </div>
+        <div class="p-col-10">
+            <input pInputText type="text" [(ngModel)]="produto.categoria" placeholder="Categoria">
+        </div>
+
+
+        <div class="p-col-10 p-offset-2">
+            <button class="ui-button-success" pButton type="submit" label="Adicionar"
+                (click)="adicionar(produto)"></button>
+        </div>
+
+    </div>
+
+
+</p-panel>
+
+<p-panel>
+    <div class="container">
+        <div class="p-col-4">
+            <input pInputText type="text" [(ngModel)]="categoria" placeholder="filtrar categoria">
+            <button class="ui-button-success butaoPesquisar" pButton type="submit" label="PESQUISAR"
+                (click)="filtrarCategoria(categoria)"></button>
+            <button class="ui-button-info butaoPesquisar" pButton type="submit" label="LIMPAR FILTRO"
+                (click)="consultarAll()"></button>
+        </div>
+        <div class="p-col-6">
+
+        </div>
+    </div>
+</p-panel>
+
+<BR>
+<p-table [value]="produtos">
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="p-col-1"> ID </th>
+            <th class="p-col-2"> CÓDIGO DE BARRAS </th>
+            <th class="p-col-2"> NOME </th>
+            <th class="p-col-3"> DESCRIÇÃO </th>
+            <th class="p-col-1"> QUANTIDADE </th>
+            <th class="p-col-2"> CATEGORIA </th>
+            <th class="p-col-1"> AÇÕES </th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-produto>
+        <tr>
+            <td class="p-col-1">{{ produto.id }}</td>
+            <td class="p-col-2">{{ produto.codigo_barras }}</td>
+            <td class="p-col-2">{{ produto.nome }}</td>
+            <td class="p-col-3">{{ produto.descricao }}</td>
+            <td class="p-col-1">{{ produto.quantidade }}</td>
+            <td class="p-col-2">{{ produto.categoria }}</td>
+
+            <td class="p-col-1" style="text-align: center;">
+
+
+                <button class="ui-button-success ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
+                    icon="pi pi-search" pbutton="" style="margin-right: .8em" (click)="btnEditar(produto)"
+                    title="Editar">
+                    <span class="ui-button-icon-left ui-clickable pi pi-pencil" aria-hidden="true"></span>
+                    <span class="ui-button-text ui-clickable">ui-btn</span>
+                </button>
+
+
+                <button class="ui-button-danger ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
+                    icon="pi pi-search" pbutton="" (click)="btnDelete(produto)" title="Deletar">
+                    <span class="ui-button-icon-left ui-clickable pi pi-trash" aria-hidden="true"></span>
+                    <span class="ui-button-text ui-clickable">ui-btn</span>
+                </button>
+
+            </td>
+        </tr>
+
+        <p-dialog header="EDITAR PRODUTO" [(visible)]="modalEditar" [modal]="true" [style]="{width: '50vw'}"
+            [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+
+            <div class="p-grid">
+
+                <div class="p-col-2">ID: </div>
+                <div class="p-col-10">
+                    <input disabled="disabled" pInputText type="text" [(value)]="produtoEditar.id">
+                </div>
+
+                <div class="p-col-2">Código de barras: </div>
+                <div class="p-col-10">
+                    <input pInputText type="text" [(value)]="produtoEditar.codigo_barras"
+                        [(ngModel)]="produtoEditar.codigo_barras">
+                </div>
+
+                <div class="p-col-2">Nome: </div>
+                <div class="p-col-10">
+                    <input pInputText type="text" [(value)]="produtoEditar.nome" [(ngModel)]="produtoEditar.nome">
+                </div>
+
+                <div class="p-col-2">Quantidade: </div>
+                <div class="p-col-10">
+                    <input pInputText type="number" [(value)]="produtoEditar.quantidade"
+                        [(ngModel)]="produtoEditar.quantidade">
+                </div>
+
+                <div class="p-col-2">Descrição: </div>
+                <div class="p-col-10">
+                    <input pInputText type="text" [(value)]="produtoEditar.descricao"
+                        [(ngModel)]="produtoEditar.descricao">
+                </div>
+            </div>
+
+
+            <p-footer>
+                <button class="ui-button-success" type="button" pButton icon="pi pi-check"
+                    (click)="update(produtoEditar)" label="EDITAR"></button>
+
+                <button type="button" pButton icon="pi pi-times" (click)="btnCancelarEditar()" label="CANCELAR"
+                    class="ui-button-secondary"></button>
+
+            </p-footer>
+        </p-dialog>
+
+        <p-dialog header="ATENÇÃO, DESEJA REMOVER O PRODUTO?" [(visible)]="modalDelete" [modal]="true"
+            [style]="{width: '50vw'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+
+            <p-footer>
+                <button class="ui-button-success" type="button" pButton icon="pi pi-check" (click)="remover(produto.id)"
+                    label="DELETAR"></button>
+
+                <button type="button" pButton icon="pi pi-times" (click)="btnCancelarDelete()" label="CANCELAR"
+                    class="ui-button-secondary"></button>
+
+            </p-footer>
+        </p-dialog>
+
+
+    </ng-template>
+
+</p-table>
+
+<p-toast></p-toast>
